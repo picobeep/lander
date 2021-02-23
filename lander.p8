@@ -3,20 +3,43 @@ version 29
 __lua__
 
 function _init()
-	game_init()
+	title_init()
 end
 
 function _update()
-	game_update()
+	if (mode==0) then
+		title_update()
+	else
+		game_update()
+	end
 end
 
 function _draw()
-	game_draw()
+	if (mode==0) then
+		title_draw()
+	else
+		game_draw()
+	end
 end
 
+function title_init()
+	mode = 0
+end
+
+function title_update()
+	if (btn(5)) then
+		game_init()
+	end
+end
+
+function title_draw()
+	cls()
+	print("lander",48,48,7)
+	print("press ❎ to start",28,56,6) 
+end
 
 function game_init()
-	mode = 1
+	mode = 2
 
 	g=0.025 --gravity
 	w=0.0 --wind
@@ -40,6 +63,7 @@ function game_draw()
 			print("game over!",48,48,8)
 		end
 		print("press ❎ to play again",20,70,5)
+		print("press 🅾️ to return to title",10,78,5)
 	end
 end
 
@@ -47,8 +71,13 @@ function game_update()
 	if (not game_over) then
 		move_player()
 		check_land()
-	else if(btnp(5))
-		_init()
+	else
+		if(btnp(5)) then
+			game_init()
+		end
+		if(btn(4)) then
+			title_init()
+		end
 	end
 end
 
